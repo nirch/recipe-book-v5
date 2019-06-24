@@ -1,7 +1,7 @@
 
 app.factory("userSrv", function($q, $http) {
 
-    var activeUser = null;
+    var activeUser = null; // new User({id: 1, fname: "Nir" ...})
 
     function User(plainUser) {
         this.id = plainUser.id;
@@ -46,10 +46,19 @@ app.factory("userSrv", function($q, $http) {
         return async.promise;
     }
 
+    function logout() {
+        activeUser = null;
+    }
+
+    function getActiveUser() {
+        return activeUser;
+    }
 
     return {
         isLoggedIn: isLoggedIn,
-        login: login
+        login: login,
+        logout: logout,
+        getActiveUser: getActiveUser
     }
 
 });

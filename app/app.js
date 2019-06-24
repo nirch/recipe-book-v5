@@ -11,7 +11,8 @@ app.config(function($routeProvider) {
     }).when("/signup", {
         
     }).when("/recipes", {
-        
+        templateUrl: "app/recipes/recipes.html",
+        controller: "recipesCtrl"        
     }).when("/new", {
         
     })
