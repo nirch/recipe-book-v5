@@ -8,22 +8,22 @@
     <div class="collapse navbar-collapse" id="collapsibleNavId">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Recipes</a>
+                <a class="nav-link" href="#" ng-show="isLoggedIn()">Recipes</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">New</a>
+                <a class="nav-link" href="#" ng-show="isLoggedIn()">New</a>
             </li>
         </ul>
         <!-- ml auto is moving the items to the right -->
         <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Sign Up</a>
+                    <a class="nav-link" href="#" ng-hide="isLoggedIn()">Sign Up</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Login</a>
+                    <a class="nav-link" href="#" ng-hide="isLoggedIn()">Login</a>
                 </li>
                 <li class="nav-item">
-                        <a class="nav-link" href="#">Logout</a>
+                        <a class="nav-link" href="#" ng-show="isLoggedIn()">Logout</a>
                 </li>
         </ul>            
 
