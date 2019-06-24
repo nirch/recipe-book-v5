@@ -1,6 +1,12 @@
 
 app.factory("recipeSrv", function($q, $http, userSrv) {
 
+    // All of these variables are a hack becasue we don't have a server side
+    // mianitng all the recipes in the memory
+    var recipes = [];
+    var wasEverLoadedFromJSON = false;
+    var nextRecipeId;
+
     // New ES6 syntax for creating a constructor
     class Recipe {
         constructor(plainRecipe) {
@@ -11,53 +17,56 @@ app.factory("recipeSrv", function($q, $http, userSrv) {
         }
     }
 
-
     function getActiveUserRecipes() {
         var async = $q.defer();
 
-        var recipes = [];
-        var activeUserId = userSrv.getActiveUser().id;
-
-        $http.get("app/model/data/recipes.json").then(function(res) {
-            for (var i = 0; i < res.data.length; i++) {
-                if (res.data[i].userId === activeUserId) {
-                    recipes.push(new Recipe(res.data[i]));
-                }
-            }
-
+        if (wasEverLoadedFromJSON) {
             async.resolve(recipes);
-        }, function(err) {
-            async.reject(err);
-        });
+        } else {
+            var activeUserId = userSrv.getActiveUser().id;
+            wasEverLoadedFromJSON = true;
+            $http.get("app/model/data/recipes.json").then(function(res) {
+                for (var i = 0; i < res.data.length; i++) {
+                    if (res.data[i].userId === activeUserId) {
+                        recipes.push(new Recipe(res.data[i]));
+                    }
+                }
 
-
-        // var dummyRecipes = [
-        //     {
-        //         "name": "Shakshuka",
-        //         "desc": "Eggs dish with tomato",
-        //         "img": "https://downshiftology.com/wp-content/uploads/2015/11/shakshuka-12.jpg"
-        //     },
-        //     {
-        //         "name": "Greek Salad",
-        //         "desc": "Tomato and olives and cheese",
-        //         "img": "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2010/4/23/0/BX0204_greek-salad_s4x3.jpg.rend.hgtvcom.616.462.suffix/1529943050536.jpeg"
-        //     }
-        // ];
-
-
-        // for (var i = 0; i < dummyRecipes.length; i++) {
-        //     recipes.push(new Recipe(dummyRecipes[i]));
-        // }
-
-        // async.resolve(recipes);
-
+                nextRecipeId = res.data.length;
+                async.resolve(recipes);
+            }, function(err) {
+                wasEverLoadedFromJSON = false;
+                async.reject(err);
+            });
+        }
 
         return async.promise;
     }
 
+    function addRecipe(name, desc, img) {
+        var async = $q.defer();
+
+        // Creating an object elelment to pass to the contructor
+        var plainRecipe = {
+            "id": nextRecipeId,
+            "name": name,
+            "desc": desc,
+            "img": img
+        }
+        var newRecipe = new Recipe(plainRecipe);
+        recipes.push(newRecipe);
+
+        // preparing the id for the next addition
+        ++nextRecipeId;
+
+        async.resolve(newRecipe);
+
+        return async.promise;
+    }
 
     return {
-        getActiveUserRecipes: getActiveUserRecipes
+        getActiveUserRecipes: getActiveUserRecipes,
+        addRecipe: addRecipe
     }
 
 

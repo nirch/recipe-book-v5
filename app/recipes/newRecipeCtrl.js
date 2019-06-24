@@ -1,6 +1,16 @@
 
-app.controller("newRecipeCtrl", function($scope, userSrv, $location) {
+app.controller("newRecipeCtrl", function($scope, recipeSrv, $log) {
 
-    $scope.test = "dlskdls";
+    $scope.name = "";
+    $scope.desc = "";
+    $scope.img = "";
+
+    $scope.addRecipe = function() {
+       recipeSrv.addRecipe($scope.name, $scope.desc, $scope.img).then(function(newRecipe) {
+            $log.info("new recipe added: " + JSON.stringify(newRecipe));
+            $("#modelId").modal('hide')
+       });
+    }
+
 
 })
