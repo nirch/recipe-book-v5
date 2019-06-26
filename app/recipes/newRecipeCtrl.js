@@ -12,5 +12,12 @@ app.controller("newRecipeCtrl", function($scope, recipeSrv, $log) {
        });
     }
 
+    $scope.cancelNewRecipe = function() {
+        $scope.name = "";
+        $scope.desc = "";
+        $scope.img = ""; 
+        $("#modelId").modal('hide')
+    }
+
 
 })
