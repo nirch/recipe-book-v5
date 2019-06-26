@@ -3,10 +3,10 @@ app.controller("newRecipeCtrl", function($scope, recipeSrv, $log) {
 
     $scope.name = "";
     $scope.desc = "";
-    $scope.img = "";
+    $scope.img = {};
 
     $scope.addRecipe = function() {
-       recipeSrv.addRecipe($scope.name, $scope.desc, $scope.img).then(function(newRecipe) {
+       recipeSrv.addRecipe($scope.name, $scope.desc, $scope.img.src).then(function(newRecipe) {
             $log.info("new recipe added: " + JSON.stringify(newRecipe));
             $("#modelId").modal('hide')
        });
@@ -15,7 +15,7 @@ app.controller("newRecipeCtrl", function($scope, recipeSrv, $log) {
     $scope.cancelNewRecipe = function() {
         $scope.name = "";
         $scope.desc = "";
-        $scope.img = ""; 
+        $scope.img = {}; 
         $("#modelId").modal('hide')
     }
 
